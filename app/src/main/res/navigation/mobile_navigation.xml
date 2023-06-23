@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_explore">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.coventry.hkqipao.ui.home.HomeFragment"
+        android:id="@+id/navigation_explore"
+        android:name="com.coventry.hkqipao.ui.explore.ExploreFragment"
         android:label="@string/title_explore"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_explore" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.coventry.hkqipao.ui.dashboard.DashboardFragment"
+        android:id="@+id/navigation_reservation"
+        android:name="com.coventry.hkqipao.ui.reservation.ReservationFragment"
         android:label="@string/title_reservation"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_reservation" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.coventry.hkqipao.ui.notifications.NotificationsFragment"
+        android:id="@+id/navigation_profile"
+        android:name="com.coventry.hkqipao.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_profile" />
 </navigation>
