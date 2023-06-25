@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "121925385264",
+    "project_id": "hk-qipao",
+    "storage_bucket": "hk-qipao.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121925385264:android:0399f0c56e1a794c4581f5",
+        "android_client_info": {
+          "package_name": "com.coventry.hkqipao"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121925385264-5gnjq8hq12p8dkujaj7gfi08nobrj77j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.coventry.hkqipao",
+            "certificate_hash": "273761f4adb1a37bcde36dd348f581f9bbfb5aff"
+          }
+        },
+        {
+          "client_id": "121925385264-t912r4jscn6g2ob2hdf6kgnp6og7qi0a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUStXOfVZ4yGiWoVLyge7Uac1dTYxMaj8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121925385264-f859pjde5lb1lb8rbpqk3pafd4b97imt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

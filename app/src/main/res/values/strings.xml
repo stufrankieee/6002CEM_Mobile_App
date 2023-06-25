@@ -3,4 +3,8 @@
     <string name="title_explore">Explore</string>
     <string name="title_reservation">Reservation</string>
     <string name="title_profile">Profile</string>
+    <string name="profile_message_guest">Welcome Guest</string>
+
+<!-- app info -->
+    <string name="firebase_web_client_id">121925385264-t912r4jscn6g2ob2hdf6kgnp6og7qi0a.apps.googleusercontent.com</string>
 </resources>

@@ -28,21 +28,10 @@ class MainActivity : AppCompatActivity(), NetworkStatusListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navView: BottomNavigationView
-    private var informationSnackbar: Snackbar? = null
-
-//    private val viewModel: NetworkStatusViewModel by lazy {
-//        ViewModelProvider(
-//            this,
-//            object : ViewModelProvider.Factory {
-//                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//                    val networkStatusTracker = NetworkStatusTracker(this@MainActivity)
-//                    return NetworkStatusViewModel(networkStatusTracker) as T
-//                }
-//            },
-//        ).get(NetworkStatusViewModel::class.java)
-//    }
+    private var networkUnavailableSnackbar: Snackbar? = null
 
     private lateinit var networkStatusTracker: NetworkStatusTracker
+    private var isNetworkTrackingStarted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +66,9 @@ class MainActivity : AppCompatActivity(), NetworkStatusListener {
 
     override fun onResume() {
         super.onResume()
-        startNetworkStatusTracking()
+        if (!isNetworkTrackingStarted) {
+            startNetworkStatusTracking()
+        }
     }
 
     override fun onDestroy() {
@@ -87,22 +78,25 @@ class MainActivity : AppCompatActivity(), NetworkStatusListener {
 
     private fun showNetworkUnavailableSnackbar() {
         // Show the Snackbar with the CoordinatorLayout as the parent view
-        informationSnackbar = Snackbar.make(
+        networkUnavailableSnackbar = Snackbar.make(
             binding.container,
             "Network is not available",
             Snackbar.LENGTH_INDEFINITE
         )
-        informationSnackbar?.setAnchorView(navView)?.show()
+        networkUnavailableSnackbar?.setAnchorView(navView)?.show()
     }
 
     private fun hideNetworkUnavailableSnackbar() {
-        informationSnackbar?.duration = Snackbar.LENGTH_SHORT
-        informationSnackbar?.dismiss()
+        networkUnavailableSnackbar?.duration = Snackbar.LENGTH_SHORT
+        networkUnavailableSnackbar?.dismiss()
     }
 
     private fun startNetworkStatusTracking() {
         networkStatusTracker = NetworkStatusTracker(this)
+        if (!isNetworkTrackingStarted) {
         networkStatusTracker.startListening(this)
+            isNetworkTrackingStarted = true
+        }
 
         // Check initial network status
         val connectivityManager =
