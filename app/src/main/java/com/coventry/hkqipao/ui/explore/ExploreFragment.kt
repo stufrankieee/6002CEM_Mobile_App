@@ -10,6 +10,7 @@ import android.view.Window
 import android.widget.AbsListView
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -36,6 +37,8 @@ class ExploreFragment : Fragment() {
     // Display photos for user insight
     private lateinit var galleryAdapter: GalleryAdapter
     private val photos: MutableList<Photo> = mutableListOf()
+    private var currentVisibleItemPosition = 0
+    private var currentVisibleItemOffset = 0
     private var isLoading = false
     private var page = 1
 
@@ -78,9 +81,18 @@ class ExploreFragment : Fragment() {
     }
 
     private fun fetchPhotoList() {
+        // Update the flag before making the API call
         isLoading = true
 
+        // Store the current visible item position
+        val layoutManager = binding.recyclerViewExplore.layoutManager as LinearLayoutManager
+        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+        val firstVisibleItemView = binding.recyclerViewExplore.getChildAt(0)
+        val offset = firstVisibleItemView?.top ?: 0
+
         // Make Retrofit API call to fetch the photo list for the given page
+        Toast.makeText(requireContext(), "Page No: $page", Toast.LENGTH_SHORT).show()
+
         ApiServiceInstance.apiService.getPhotoList(page, 10).enqueue(object : Callback<List<Photo>> {
             override fun onResponse(call: Call<List<Photo>>, response: Response<List<Photo>>) {
                 isLoading = false
@@ -92,6 +104,9 @@ class ExploreFragment : Fragment() {
                         galleryAdapter = GalleryAdapter(photos, isLoading)
                         binding.recyclerViewExplore.adapter = galleryAdapter
                         galleryAdapter.notifyDataSetChanged()
+
+                        // Restore the scroll position
+                        (binding.recyclerViewExplore.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(firstVisibleItemPosition, offset)
                     }
                 } else {
                     // Handle API error
