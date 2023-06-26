@@ -2,8 +2,24 @@
     <string name="app_name">HK QiPao</string>
     <string name="title_explore">Explore</string>
     <string name="title_reservation">Reservation</string>
+    <string name="reservation_hint_customer_name">Customer Name</string>
+    <string name="reservation_hint_email_address">Email Address</string>
+    <string name="reservation_hint_phone_number">Phone Number</string>
+    <string name="reservation_hint_date_of_rental">Date of Rental</string>
+    <string name="reservation_hint_number_of_people">Number of people</string>
+    <string name="reservation_hint_remark">Remark</string>
+    <string name="reservation_next_button">Next</string>
+    <string name="reservation_back_button">Back</string>
+    <string name="reservation_submit_button">Confirm your reservation</string>
+    <string name="reservation_status_reservation_submitted">Reservation Submitted</string>
+    <string name="reservation_status_reservation_failed">Failed to submit your reservation</string>
+    <string name="reservation_status_required_field">This field is required</string>
     <string name="title_profile">Profile</string>
     <string name="profile_message_guest">Welcome Guest</string>
+
+
+
+    <string name="app_status_network_connection_failed">Network is not available</string>
 
 <!-- app info -->
     <string name="firebase_web_client_id">121925385264-t912r4jscn6g2ob2hdf6kgnp6og7qi0a.apps.googleusercontent.com</string>

@@ -6,17 +6,73 @@
     android:layout_height="match_parent"
     tools:context=".ui.reservation.ReservationFragment">
 
-    <TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/edittext_customer_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:hint="@string/reservation_hint_customer_name"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/edittext_email_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/reservation_hint_email_address"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_customer_name"/>
+
+    <EditText
+        android:id="@+id/edittext_phone_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/reservation_hint_phone_number"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_email_address"/>
+
+    <EditText
+        android:id="@+id/edittext_date_of_rental"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/reservation_hint_date_of_rental"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_phone_number"/>
+
+    <EditText
+        android:id="@+id/edittext_number_of_people"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/reservation_hint_number_of_people"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_date_of_rental"/>
+
+    <EditText
+        android:id="@+id/edittext_remark"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/reservation_hint_remark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_number_of_people"/>
+
+    <Button
+        android:id="@+id/button_submit_reservation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/reservation_submit_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_remark" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

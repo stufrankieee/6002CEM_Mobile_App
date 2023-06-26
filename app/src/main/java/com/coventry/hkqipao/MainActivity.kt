@@ -6,6 +6,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +18,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.coventry.hkqipao.databinding.ActivityMainBinding
+import com.coventry.hkqipao.ui.profile.ProfileFragment
 //import com.coventry.hkqipao.network.MyState
 //import com.coventry.hkqipao.network.NetworkStatusTracker
 //import com.coventry.hkqipao.network.NetworkStatusViewModel
@@ -26,12 +28,15 @@ import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity(), NetworkStatusListener {
 
+    companion object {
+        private const val TAG = "MainActivity"
+    }
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var navView: BottomNavigationView
     private var networkUnavailableSnackbar: Snackbar? = null
 
     private lateinit var networkStatusTracker: NetworkStatusTracker
-    private var isNetworkTrackingStarted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,9 +71,8 @@ class MainActivity : AppCompatActivity(), NetworkStatusListener {
 
     override fun onResume() {
         super.onResume()
-        if (!isNetworkTrackingStarted) {
-            startNetworkStatusTracking()
-        }
+        Log.d(TAG, "onResume called")
+        startNetworkStatusTracking()
     }
 
     override fun onDestroy() {
@@ -93,10 +97,7 @@ class MainActivity : AppCompatActivity(), NetworkStatusListener {
 
     private fun startNetworkStatusTracking() {
         networkStatusTracker = NetworkStatusTracker(this)
-        if (!isNetworkTrackingStarted) {
         networkStatusTracker.startListening(this)
-            isNetworkTrackingStarted = true
-        }
 
         // Check initial network status
         val connectivityManager =
@@ -109,5 +110,9 @@ class MainActivity : AppCompatActivity(), NetworkStatusListener {
 
         // Call onNetworkStatusChanged with the initial network status
         onNetworkStatusChanged(isOnline)
+    }
+
+    fun getBottomNavigationView(): BottomNavigationView {
+        return navView
     }
 }

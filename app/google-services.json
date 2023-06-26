@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "121925385264",
+    "firebase_url": "https://hk-qipao-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "hk-qipao",
     "storage_bucket": "hk-qipao.appspot.com"
   },
