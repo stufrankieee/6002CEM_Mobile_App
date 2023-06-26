@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">HK QiPao</string>
     <string name="title_explore">Explore</string>
+    <string name="explore_tab_inspire">Inspire</string>
+    <string name="explore_tab_place">Place</string>
     <string name="title_reservation">Reservation</string>
     <string name="reservation_hint_customer_name">Customer Name</string>
     <string name="reservation_hint_email_address">Email Address</string>

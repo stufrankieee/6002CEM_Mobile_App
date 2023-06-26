@@ -12,16 +12,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.coventry.hkqipao.databinding.FragmentExploreBinding
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.coventry.hkqipao.model.Photo
 import com.coventry.hkqipao.network.ApiServiceInstance
 import com.coventry.hkqipao.ui.gallery.GalleryAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.Tab
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,105 +39,51 @@ class ExploreFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    // Display photos for user insight
-    private lateinit var galleryAdapter: GalleryAdapter
-    private val photos: MutableList<Photo> = mutableListOf()
-    private var currentVisibleItemPosition = 0
-    private var currentVisibleItemOffset = 0
-    private var isLoading = false
-    private var page = 1
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentExploreBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val recyclerViewExplore: RecyclerView = binding.recyclerViewExplore
-        recyclerViewExplore.layoutManager = GridLayoutManager(requireContext(), 2)
+        tabLayout = binding.tabLayout
+        viewPager = binding.viewPager
 
-        // Set up RecyclerView with your custom adapter
-        galleryAdapter = GalleryAdapter(emptyList(), isLoading)
-        recyclerViewExplore.adapter = galleryAdapter
-
-        // Fetch the initial photo list from the API
-        fetchPhotoList()
-
-        // Add scroll listener for pagination
-        recyclerViewExplore.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    val lastVisibleItemPosition =
-                        (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    if (!isLoading && lastVisibleItemPosition == photos.size - 1) {
-                        // Load more data
-                        page++
-                        fetchPhotoList()
-                    }
-                }
-            }
-        })
+        setupViewPager()
 
         return root
     }
 
-    private fun fetchPhotoList() {
-        // Update the flag before making the API call
-        isLoading = true
+    private fun setupViewPager() {
+        val adapter = ViewPagerAdapter(childFragmentManager)
+        adapter.addFragment(GalleryFragment(), "Inspire")
+        adapter.addFragment(PlaceFragment(), "Place")
+        // Add more fragments and their corresponding titles
 
-        // Store the current visible item position
-        val layoutManager = binding.recyclerViewExplore.layoutManager as LinearLayoutManager
-        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-        val firstVisibleItemView = binding.recyclerViewExplore.getChildAt(0)
-        val offset = firstVisibleItemView?.top ?: 0
-
-        // Make Retrofit API call to fetch the photo list for the given page
-        Toast.makeText(requireContext(), "Page No: $page", Toast.LENGTH_SHORT).show()
-
-        ApiServiceInstance.apiService.getPhotoList(page, 10).enqueue(object : Callback<List<Photo>> {
-            override fun onResponse(call: Call<List<Photo>>, response: Response<List<Photo>>) {
-                isLoading = false
-                if (response.isSuccessful) {
-                    val photoList = response.body()
-                    if (photoList != null) {
-                        // Update the RecyclerView adapter with new data
-                        photos.addAll(photoList)
-                        galleryAdapter = GalleryAdapter(photos, isLoading)
-                        binding.recyclerViewExplore.adapter = galleryAdapter
-                        galleryAdapter.notifyDataSetChanged()
-
-                        // Restore the scroll position
-                        (binding.recyclerViewExplore.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(firstVisibleItemPosition, offset)
-                    }
-                } else {
-                    // Handle API error
-                }
-            }
-
-            override fun onFailure(call: Call<List<Photo>>, t: Throwable) {
-                isLoading = false
-                // Handle network error
-            }
-        })
+        viewPager.adapter = adapter
+        tabLayout.setupWithViewPager(viewPager)
     }
 
-//    private fun showLightbox(photo: Photo) {
-//        val dialog = Dialog(requireContext(), R.style.Theme_Black_NoTitleBar_Fullscreen)
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//        dialog.setContentView(R.layout.dialog_lightbox)
-//
-//        val photoImageView: ImageView = dialog.findViewById(R.id.photoImageView)
-//
-//        Glide.with(dialog.context)
-//            .load(photo.downloadUrl)
-//            .into(photoImageView)
-//
-//        dialog.show()
-//    }
+    private class ViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
+        private val fragmentList = mutableListOf<Fragment>()
+        private val titleList = mutableListOf<String>()
+
+        fun addFragment(fragment: Fragment, title: String) {
+            fragmentList.add(fragment)
+            titleList.add(title)
+        }
+
+        override fun getCount(): Int = fragmentList.size
+
+        override fun getItem(position: Int): Fragment = fragmentList[position]
+
+        override fun getPageTitle(position: Int): CharSequence? = titleList[position]
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
