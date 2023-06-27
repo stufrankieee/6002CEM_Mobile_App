@@ -1,12 +1,6 @@
 package com.coventry.hkqipao.ui.profile
 
-import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +12,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.coventry.hkqipao.R
@@ -39,7 +32,6 @@ class ProfileFragment : Fragment(), AdapterView.OnItemClickListener {
     companion object {
         private const val TAG = "ProfileFragment"
         private const val RC_SIGN_IN = 9001
-        private const val REQUEST_LOCATION_PERMISSION = 123
         private val settingsTitles = arrayOf("Reservation Record", "Saved Inspiration")
     }
 
@@ -51,10 +43,6 @@ class ProfileFragment : Fragment(), AdapterView.OnItemClickListener {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-
-    // Retrieve the user's GPS coordinate
-    private lateinit var locationManager: LocationManager
-    private lateinit var locationListener: LocationListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,32 +70,6 @@ class ProfileFragment : Fragment(), AdapterView.OnItemClickListener {
         // Initialize Firebase Auth
         auth = Firebase.auth
 
-        locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationListener = object : LocationListener {
-            override fun onLocationChanged(location: Location) {
-                // Called when the location has changed
-                val latitude = location.latitude
-                val longitude = location.longitude
-
-                val textGpsInformation: TextView = binding.textGpsInformation
-                textGpsInformation.text = "Your latitude: ${latitude} \n Your longitude: ${longitude}"
-                // Use the latitude and longitude values as needed
-                // You can update the UI or perform any other actions here
-            }
-
-            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-                // Called when the status of the location provider has changed
-            }
-
-//            override fun onProviderEnabled(provider: String?) {
-//                // Called when the location provider is enabled
-//            }
-//
-//            override fun onProviderDisabled(provider: String?) {
-//                // Called when the location provider is disabled
-//            }
-        }
-
         return root
     }
 
@@ -123,19 +85,8 @@ class ProfileFragment : Fragment(), AdapterView.OnItemClickListener {
         updateUI(currentUser)
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener)
-//        } else {
-//            // Request location permission from the user if not granted
-//            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
-//        }
-//    }
-
     override fun onPause() {
         super.onPause()
-        locationManager.removeUpdates(locationListener)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -156,33 +107,6 @@ class ProfileFragment : Fragment(), AdapterView.OnItemClickListener {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, start requesting location updates
-                if (ActivityCompat.checkSelfPermission(
-                        requireActivity(),
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                        requireActivity(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return
-                }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener)
-            } else {
-                // Permission denied, handle accordingly (e.g., show a message or disable location-related functionality)
-            }
-        }
-    }
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         // Handle item click event here
         val selectedItem = settingsTitles[position]
