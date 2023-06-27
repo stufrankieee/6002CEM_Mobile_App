@@ -76,14 +76,26 @@
         app:layout_constraintTop_toBottomOf="@+id/edittext_remark" />
 
     <Button
-        android:id="@+id/button_cancel_reservation"
+        android:id="@+id/button_mark_event_to_calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/reservation_cancel_button"
-        android:backgroundTint="@android:color/holo_red_light"
+        android:text="@string/reservation_mark_event_button"
+        android:backgroundTint="@android:color/holo_blue_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_update_reservation" />
+
+    <Button
+        android:id="@+id/button_cancel_reservation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:text="@string/reservation_cancel_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_mark_event_to_calendar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

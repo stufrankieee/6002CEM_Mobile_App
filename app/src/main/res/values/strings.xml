@@ -15,6 +15,7 @@
     <string name="reservation_submit_button">Confirm reservation</string>
     <string name="reservation_update_record">Reservation update:</string>
     <string name="reservation_update_button">Update</string>
+    <string name="reservation_mark_event_button">Mark on reservation to your calendar</string>
     <string name="reservation_cancel_button">Cancel</string>
     <string name="reservation_status_reservation_submitted">Reservation Submitted</string>
     <string name="reservation_status_reservation_failed">Failed to submit your reservation</string>

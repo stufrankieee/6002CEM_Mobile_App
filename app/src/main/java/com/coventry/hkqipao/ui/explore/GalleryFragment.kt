@@ -84,9 +84,9 @@ class GalleryFragment : Fragment() {
         val offset = firstVisibleItemView?.top ?: 0
 
         // Make Retrofit API call to fetch the photo list for the given page
-        Toast.makeText(requireContext(), "Page No: $page", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), "Page No: $page", Toast.LENGTH_SHORT).show()
 
-        ApiServiceInstance.apiService.getPhotoList(page, 10).enqueue(object : Callback<List<Photo>> {
+        ApiServiceInstance.apiService.getPhotoList(page, 15).enqueue(object : Callback<List<Photo>> {
             override fun onResponse(call: Call<List<Photo>>, response: Response<List<Photo>>) {
                 isLoading = false
                 if (response.isSuccessful) {

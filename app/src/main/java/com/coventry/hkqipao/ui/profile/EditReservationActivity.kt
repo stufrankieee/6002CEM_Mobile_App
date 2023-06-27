@@ -1,7 +1,10 @@
 package com.coventry.hkqipao.ui.profile
 
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -16,6 +19,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
 class EditReservationActivity : AppCompatActivity() {
 
@@ -39,7 +47,7 @@ class EditReservationActivity : AppCompatActivity() {
 
         val user = Firebase.auth.currentUser
         var selectedItemDate = intent?.getStringExtra("selectedItemDate")
-        var selectedItemCustomerName= intent?.getStringExtra("selectedItemCustomerName")
+        var selectedItemCustomerName = intent?.getStringExtra("selectedItemCustomerName")
         var selectedItemEmailAddress = intent?.getStringExtra("selectedItemEmailAddress")
         var selectedItemPhoneNumber = intent?.getStringExtra("selectedItemPhoneNumber")
         var selectedItemDateOfRental = intent?.getStringExtra("selectedItemDateOfRental")
@@ -55,10 +63,12 @@ class EditReservationActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = getString(R.string.reservation_update_record) + " $selectedItemDate"
+        supportActionBar?.title =
+            getString(R.string.reservation_update_record) + " $selectedItemDate"
 
         val buttonUpdateRecord: Button = viewBinding.buttonUpdateReservation
         val buttonCancelRecord: Button = viewBinding.buttonCancelReservation
+        val buttonMarkEventToCalendar: Button = viewBinding.buttonMarkEventToCalendar
 
         buttonUpdateRecord.setOnClickListener {
             if (user == null) {
@@ -75,11 +85,7 @@ class EditReservationActivity : AppCompatActivity() {
                 val numberOfPeople = viewBinding.edittextNumberOfPeople.text.toString().trim()
                 val remark = viewBinding.edittextRemark.text.toString().trim()
                 if (areStringsNullOrEmpty(
-                        customerName,
-                        emailAddress,
-                        phoneNumber,
-                        dateOfRental,
-                        numberOfPeople
+                        customerName, emailAddress, phoneNumber, dateOfRental, numberOfPeople
                     )
                 ) {
                     showSnackbar(rootView, getString(R.string.reservation_status_required_field))
@@ -101,17 +107,21 @@ class EditReservationActivity : AppCompatActivity() {
                                     // Record submitted successfully
                                     // Handle any further actions or UI updates here
                                     Log.d(TAG, "Success")
-                                    showSnackbar(rootView, getString(R.string.reservation_status_reservation_submitted))
+                                    showSnackbar(
+                                        rootView,
+                                        getString(R.string.reservation_status_reservation_submitted)
+                                    )
                                     finish()
-                                }
-                                .addOnFailureListener { error ->
+                                }.addOnFailureListener { error ->
                                     // An error occurred while submitting the record
                                     // Handle the error appropriately
                                     Log.d(TAG, "Fail: $error")
-                                    showSnackbar(rootView, getString(R.string.reservation_status_reservation_failed))
+                                    showSnackbar(
+                                        rootView,
+                                        getString(R.string.reservation_status_reservation_failed)
+                                    )
 
-                                }
-                                .addOnCompleteListener { task ->
+                                }.addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
                                         // Success
                                     } else {
@@ -129,6 +139,36 @@ class EditReservationActivity : AppCompatActivity() {
 
         buttonCancelRecord.setOnClickListener {
 
+        }
+
+        buttonMarkEventToCalendar.setOnClickListener {
+            val dateString = selectedItemDateOfRental
+            val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val date = LocalDate.parse(dateString, dateFormatter)
+
+            val startTime = LocalDateTime.of(date, LocalTime.MIN)
+            val eventStartTimeInMillis =
+                startTime.toInstant(java.time.ZoneOffset.UTC).toEpochMilli()
+
+            val endTime = LocalDateTime.of(date, LocalTime.MAX)
+            val eventEndTimeInMillis = endTime.toInstant(java.time.ZoneOffset.UTC).toEpochMilli()
+            // Set a notification reminder for the event
+            val reminders = ContentValues().apply {
+                put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT)
+            }
+
+            val intent = Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.Events.TITLE, "QiPao Rental").putExtra(
+                    CalendarContract.Events.DESCRIPTION,
+                    "Reservation Details: \nCustomer Name: ${selectedItemCustomerName}\nEmail Address: ${selectedItemEmailAddress}\nPhone Number: ${selectedItemPhoneNumber}\nDate Of Rental: ${selectedItemDateOfRental}\nNumber Of People: ${selectedItemNumberOfPeople}\nRemark: ${selectedItemRemark}"
+                ).putExtra(CalendarContract.Events.EVENT_LOCATION, "Yan Shang Kee Qipao")
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, eventStartTimeInMillis)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, eventEndTimeInMillis)
+                .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
+                .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, reminders)
+                .putExtra(CalendarContract.Events.HAS_ALARM, 1)
+
+            startActivity(intent)
         }
     }
 
