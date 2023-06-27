@@ -16,6 +16,8 @@
     <string name="reservation_status_reservation_submitted">Reservation Submitted</string>
     <string name="reservation_status_reservation_failed">Failed to submit your reservation</string>
     <string name="reservation_status_required_field">This field is required</string>
+    <string name="reservation_status_sign_in_account">Please sign in your account</string>
+    <string name="reservation_action_sign_in">Sign In</string>
     <string name="title_profile">Profile</string>
     <string name="profile_message_guest">Welcome Guest</string>
 

@@ -12,11 +12,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.coventry.hkqipao.R
@@ -32,12 +34,13 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), AdapterView.OnItemClickListener {
 
     companion object {
         private const val TAG = "ProfileFragment"
         private const val RC_SIGN_IN = 9001
         private const val REQUEST_LOCATION_PERMISSION = 123
+        private val settingsTitles = arrayOf("Reservation Record", "Saved Inspiration")
     }
 
     private var _binding: FragmentProfileBinding? = null
@@ -67,6 +70,11 @@ class ProfileFragment : Fragment() {
             .requestIdToken(getString(R.string.firebase_web_client_id))
             .requestEmail()
             .build()
+
+        val listviewAccountSetting: ListView = binding.listviewAccountSetting
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_account_setting, R.id.settingTitle, settingsTitles)
+        listviewAccountSetting.adapter = adapter
+        listviewAccountSetting.onItemClickListener = this
 
         // Initialize sign in client
         googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
@@ -174,6 +182,15 @@ class ProfileFragment : Fragment() {
                 // Permission denied, handle accordingly (e.g., show a message or disable location-related functionality)
             }
         }
+    }
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        // Handle item click event here
+        val selectedItem = settingsTitles[position]
+
+        // Start the new activity
+        val intent = Intent(requireContext(), ReservationRecordActivity::class.java)
+        intent.putExtra("selectedItem", selectedItem)
+        startActivity(intent)
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
