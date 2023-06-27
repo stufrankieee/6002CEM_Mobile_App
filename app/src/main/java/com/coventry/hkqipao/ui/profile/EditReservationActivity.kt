@@ -38,17 +38,29 @@ class EditReservationActivity : AppCompatActivity() {
         val reservationRef = database.getReference("reservation")
 
         val user = Firebase.auth.currentUser
-        val selectedItem = intent?.getStringExtra("selectedItem")
+        var selectedItemDate = intent?.getStringExtra("selectedItemDate")
+        var selectedItemCustomerName= intent?.getStringExtra("selectedItemCustomerName")
+        var selectedItemEmailAddress = intent?.getStringExtra("selectedItemEmailAddress")
+        var selectedItemPhoneNumber = intent?.getStringExtra("selectedItemPhoneNumber")
+        var selectedItemDateOfRental = intent?.getStringExtra("selectedItemDateOfRental")
+        var selectedItemNumberOfPeople = intent?.getStringExtra("selectedItemNumberOfPeople")
+        var selectedItemRemark = intent?.getStringExtra("selectedItemRemark")
+
+        viewBinding.edittextCustomerName.setText(selectedItemCustomerName)
+        viewBinding.edittextEmailAddress.setText(selectedItemEmailAddress)
+        viewBinding.edittextPhoneNumber.setText(selectedItemPhoneNumber)
+        viewBinding.edittextDateOfRental.setText(selectedItemDateOfRental)
+        viewBinding.edittextNumberOfPeople.setText(selectedItemNumberOfPeople)
+        viewBinding.edittextRemark.setText(selectedItemRemark)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = selectedItem
+        supportActionBar?.title = getString(R.string.reservation_update_record) + " $selectedItemDate"
 
-        Log.d(TAG, "Screen: ${selectedItem}")
+        val buttonUpdateRecord: Button = viewBinding.buttonUpdateReservation
+        val buttonCancelRecord: Button = viewBinding.buttonCancelReservation
 
-        val buttonSubmitRecord: Button = viewBinding.buttonSubmitReservation
-
-        buttonSubmitRecord.setOnClickListener {
+        buttonUpdateRecord.setOnClickListener {
             if (user == null) {
                 showSnackbar(rootView, getString(R.string.reservation_status_sign_in_account))
             } else {
@@ -83,33 +95,40 @@ class EditReservationActivity : AppCompatActivity() {
                     )
 
                     user?.let {
-                        reservationRef.child(it.uid).setValue(reservationEntry)
-                            .addOnSuccessListener {
-                                // Record submitted successfully
-                                // Handle any further actions or UI updates here
-                                Log.d(TAG, "Success")
-                                showSnackbar(rootView, getString(R.string.reservation_status_reservation_submitted))
-                            }
-                            .addOnFailureListener { error ->
-                                // An error occurred while submitting the record
-                                // Handle the error appropriately
-                                Log.d(TAG, "Fail: $error")
-                                showSnackbar(rootView, getString(R.string.reservation_status_reservation_failed))
-
-                            }
-                            .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    // Success
-                                } else {
-                                    // Failure
-                                    val exception = task.exception
-                                    // Log or handle the exception as needed
-                                    Log.d(TAG, "Exception: $exception")
+                        selectedItemDate?.let { it1 ->
+                            reservationRef.child(it.uid).child(it1).setValue(reservationEntry)
+                                .addOnSuccessListener {
+                                    // Record submitted successfully
+                                    // Handle any further actions or UI updates here
+                                    Log.d(TAG, "Success")
+                                    showSnackbar(rootView, getString(R.string.reservation_status_reservation_submitted))
+                                    finish()
                                 }
-                            }
+                                .addOnFailureListener { error ->
+                                    // An error occurred while submitting the record
+                                    // Handle the error appropriately
+                                    Log.d(TAG, "Fail: $error")
+                                    showSnackbar(rootView, getString(R.string.reservation_status_reservation_failed))
+
+                                }
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        // Success
+                                    } else {
+                                        // Failure
+                                        val exception = task.exception
+                                        // Log or handle the exception as needed
+                                        Log.d(TAG, "Exception: $exception")
+                                    }
+                                }
+                        }
                     }
                 }
             }
+        }
+
+        buttonCancelRecord.setOnClickListener {
+
         }
     }
 
@@ -131,6 +150,6 @@ class EditReservationActivity : AppCompatActivity() {
     private fun showSnackbar(view: View, message: String) {
         val duration = Snackbar.LENGTH_LONG
         val snackbar = Snackbar.make(view, message, duration)
-        snackbar.setAnchorView(navView)?.show()
+        snackbar.show()
     }
 }

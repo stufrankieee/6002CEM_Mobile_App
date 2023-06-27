@@ -10,40 +10,41 @@ import com.coventry.hkqipao.R
 class ReservationRecordAdapter(private val dataSet: MutableList<ReservationRecordsEntry>) :
     RecyclerView.Adapter<ReservationRecordAdapter.ViewHolder>() {
 
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder)
-     */
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textDateOfRental : TextView
-        val textReservationInfo : TextView
+    private var itemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemClick(reservation: ReservationRecordsEntry)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val textDateOfRental: TextView = view.findViewById(R.id.text_date_of_rental)
+        val textReservationInfo: TextView = view.findViewById(R.id.text_reservation_info)
 
         init {
-            // Define click listener for the ViewHolder's View
-            textDateOfRental = view.findViewById(R.id.text_date_of_rental)
-            textReservationInfo = view.findViewById(R.id.text_reservation_info)
+            view.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    itemClickListener?.onItemClick(dataSet[position])
+                }
+            }
         }
     }
 
-    // Create new views (invoked by the layout manager)
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        // Create a new view, which defines the UI of the list item
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_reservation_records, viewGroup, false)
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_reservation_records, parent, false)
         return ViewHolder(view)
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
-        viewHolder.textDateOfRental.text = dataSet[position].dateOfRental
-        viewHolder.textReservationInfo.text = dataSet[position].customerName
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val reservation = dataSet[position]
+        holder.textDateOfRental.text = reservation.dateOfRental
+        holder.textReservationInfo.text = reservation.customerName
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
-
 }

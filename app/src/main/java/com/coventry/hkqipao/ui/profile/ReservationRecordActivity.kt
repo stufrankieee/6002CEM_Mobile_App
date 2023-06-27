@@ -1,5 +1,6 @@
 package com.coventry.hkqipao.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -68,6 +69,26 @@ class ReservationRecordActivity : AppCompatActivity() {
 
                 // Set the adapter on the RecyclerView
                 listReservationRecord.adapter = reservationRecordAdapter
+                reservationRecordAdapter.setOnItemClickListener(object : ReservationRecordAdapter.OnItemClickListener {
+                    override fun onItemClick(reservation: ReservationRecordsEntry) {
+                        // Handle the item click event here
+                        // The reservation parameter contains the clicked item's data
+                        // Handle item click event here
+                        val selectedItem = reservation
+
+                        // Start the new activity
+                        val intent = Intent(this@ReservationRecordActivity, EditReservationActivity::class.java)
+                        intent.putExtra("selectedItemDate", selectedItem.date)
+                        intent.putExtra("selectedItemCustomerName", selectedItem.customerName)
+                        intent.putExtra("selectedItemEmailAddress", selectedItem.emailAddress)
+                        intent.putExtra("selectedItemPhoneNumber", selectedItem.phoneNumber)
+                        intent.putExtra("selectedItemDateOfRental", selectedItem.dateOfRental)
+                        intent.putExtra("selectedItemNumberOfPeople", selectedItem.numberOfPeople)
+                        intent.putExtra("selectedItemRemark", selectedItem.remark)
+                        startActivity(intent)
+                    }
+                })
+
             }
 
             override fun onCancelled(error: DatabaseError) {

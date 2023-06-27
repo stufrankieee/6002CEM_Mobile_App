@@ -66,13 +66,24 @@
         app:layout_constraintTop_toBottomOf="@+id/edittext_number_of_people"/>
 
     <Button
-        android:id="@+id/button_submit_reservation"
+        android:id="@+id/button_update_reservation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/reservation_submit_button"
+        android:text="@string/reservation_update_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edittext_remark" />
+
+    <Button
+        android:id="@+id/button_cancel_reservation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reservation_cancel_button"
+        android:backgroundTint="@android:color/holo_red_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_update_reservation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

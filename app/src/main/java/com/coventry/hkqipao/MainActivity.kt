@@ -1,5 +1,8 @@
 package com.coventry.hkqipao
 
+//import com.coventry.hkqipao.network.MyState
+//import com.coventry.hkqipao.network.NetworkStatusTracker
+//import com.coventry.hkqipao.network.NetworkStatusViewModel
 import NetworkStatusListener
 import NetworkStatusTracker
 import android.content.Context
@@ -7,24 +10,14 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.coventry.hkqipao.databinding.ActivityMainBinding
-import com.coventry.hkqipao.ui.profile.ProfileFragment
-//import com.coventry.hkqipao.network.MyState
-//import com.coventry.hkqipao.network.NetworkStatusTracker
-//import com.coventry.hkqipao.network.NetworkStatusViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-
 
 class MainActivity : AppCompatActivity(), NetworkStatusListener {
 

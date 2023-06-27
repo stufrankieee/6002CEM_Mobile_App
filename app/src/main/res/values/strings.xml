@@ -12,7 +12,10 @@
     <string name="reservation_hint_remark">Remark</string>
     <string name="reservation_next_button">Next</string>
     <string name="reservation_back_button">Back</string>
-    <string name="reservation_submit_button">Confirm your reservation</string>
+    <string name="reservation_submit_button">Confirm reservation</string>
+    <string name="reservation_update_record">Reservation update:</string>
+    <string name="reservation_update_button">Update</string>
+    <string name="reservation_cancel_button">Cancel</string>
     <string name="reservation_status_reservation_submitted">Reservation Submitted</string>
     <string name="reservation_status_reservation_failed">Failed to submit your reservation</string>
     <string name="reservation_status_required_field">This field is required</string>
